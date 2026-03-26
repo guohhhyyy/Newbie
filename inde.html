@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>网购</title>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC&display=swap" rel="stylesheet">
+        <script src="https://webapi.amap.com/maps?v=2.0&key=b9bd0201e913953482c3870379333369Key"></script>
+        <style>
+/* 保持原有样式不变 */
+body {
+    font-family: "Noto Sans SC", sans-serif;
+    padding: 40px;
+    text-align: center;
+}
+.category{
+    color: black;
+    margin: 10px;
+    font-size: 20px;
+    display: inline-block;
+    border-radius: 8px;
+    border: none;
+}
+.category:hover{
+    color: gray;
+    cursor: pointer;
+}
+.category.active{
+    color: gray !important;
+}
+.square{
+    display: block;
+    width: 400px;
+    min-height: 450px;
+    flex-shrink: 0;
+    padding-bottom: 45px;
+}
+.things1{
+    background-color:white;
+}
+.things2{
+    background-color:white;
+}
+.things3{
+    background-color: white;
+}
+.things4{
+    background-color: white;
+}
+.things5{
+    background-color: white;
+}
+.things6{
+    background-color: white;
+}
+.product1{
+    width: 310px;
+    height: 310px;
+    object-fit: cover;
+    margin-top: 30px;
+}
+.product2{
+    width: 310px;
+    height: 310px;
+    object-fit: cover;
+    margin-top: 30px;
+}
+.product3{
+    width: 310px;
+    height: 310px;
+    object-fit: cover;
+    margin-top: 30px;
+}
+.product4{
+    width: 310px;
+    height: 310px;
+    object-fit: cover;
+    margin-top: 30px;
+}
+.product5{
+    width: 310px;
+    height: 310px;
+    object-fit: cover;
+    margin-top: 30px;
+}
+.product6{
+    width: 310px;
+    height: 310px;
+    object-fit: cover;
+    margin-top: 30px;
+}
+.product7{
+    width: 310px;
+    height: 310px;
+    object-fit: cover;
+    margin-top: 30px;
+}
+.product8{
+    width: 310px;
+    height: 310px;
+    object-fit: cover;
+    margin-top: 30px;
+}
+.product9{
+    width: 310px;
+    height: 310px;
+    object-fit: cover;
+    margin-top: 30px;
+}
+.product10{
+    width: 310px;
+    height: 310px;
+    object-fit: cover;
+    margin-top: 30px;
+}
+.product11{
+    width: 310px;
+    height: 310px;
+    object-fit: cover;
+    margin-top: 30px;
+}
+.product-info{
+    margin-top: 10px;
+    padding-left: 0;
+    text-align: left;
+}
+.product-name{
+    margin: 5px 0;
+    font-size: 14px;
+    color: black;
+}
+.product-price{
+    font-size: 18px;
+    color: #333;
+    margin: 5px 0;
+}
+.square-container{
+    display: contents;
+    justify-content: center;
+    gap: 10px;
+}
+.square-row{
+    margin-bottom: 0px;
+    display: contents;
+}
+.products-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 20px;
+    padding: 0 20px;
+    max-width: 1240px;
+    margin: 0 auto;
+}
+.hide{
+    display: none !important;
+}
+.container{
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.product-action{
+    background-color: #FF9500;
+    color: white;
+    display: inline-block;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    padding: 6px 12px;
+    border: none;
+    transition: background-color 0.2s;
+    box-shadow: 0 2px 4px rgba(255, 149, 0, 0.2);
+    margin: 0;
+}
+.product-action:hover{
+    background-color: #E68900;
+}
+.price-action-wrap{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 310px;
+    margin-top: 5px;
+}
+.modal-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+.modal-card{
+   background: white;
+   border-radius: 24px;
+   padding: 32px 28px;
+   max-width: 620px;
+   width: 90%;
+   max-height: 720px;
+   height: 720px;
+   overflow-y: auto;
+   box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.25);
+   position: relative;
+   font-size: 16px;
+}
+.modal-card::before{
+    display: none;
+}
+.hidden{
+    display: none !important;
+}
+body.modal-open{
+    overflow: hidden;
+}
+.font{
+    padding-top: 20px;
+}
+.modal-card h3{
+    font-size: 24px;
+}
+.close{
+    padding: 20px 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    border-top: 1px solid #eee;
+    margin-top: 30px;
+}
+.close button{
+    padding: 8px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+#closeModalBt{
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+}
+#closeModalBt:hover{
+    background-color: #e4e4e4;
+}
+.xinxi{
+    text-align: left;
+    padding: 0;
+    margin: 20px 0;
+}
+.xinxi input{
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+.xinxi input:focus{
+    outline: none;
+    border-color: #ff9500;
+    box-shadow: 0 0 0 2px rgba(255, 149, 0, 0.1);
+}
+.xinxi p{
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 0 5px 0;
+}
+#locationBtn{
+    transition: all 0.2s ease;
+}
+#location:hover{
+    background-color: #E68900 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(255, 149, 0, 0.3);
+}
+#addressInput:focus{
+    outline: none;
+    border-color: #FF9500 !important;
+    box-shadow: 0 0 0 2px rgba(255, 149, 0, 0.1);
+}
+.toast{
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	background-color: #ff9800;
+	color: white;
+	padding: 15px 25px;
+	border-radius: 5px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 2);
+	transform: translateX(120%);
+	transition: transform 0.3s ease;
+	z-index: 1000;
+	max-width: 300px;
+}
+.toast.show{
+	transform: translateX(0);
+}
+.menu-item{
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.menu-item:hover{
+    background-color: #f5f5f5;
+}
+.order-page{
+    max-width: 800px;
+    text-align: left;
+    padding: 20px;
+    margin: 0 auto;
+}
+.order-item{
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 15px 0;
+    display: flex;
+    gap: 20px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.order-item img{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.order-details{
+    flex: 1;
+}
+.order-details h3{
+    margin: 0 0 10px 0;
+    font-size: 16px;
+}
+.order-details p{
+    margin: 5px 0;
+    color: #666;
+    font-size: 14px;
+}
+.order-price{
+    color: #ff9500;
+    font-weight: bold;
+    font-size: 18px;
+}
+.back-btn{
+    background: none;
+    border: 1px solid #ff9500;
+    color: #ff9500;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+.back-btn:hover{
+    background-color: #ff9500;
+    color: white;
+}
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, -30%); }
+    15% { opacity: 1; transform: translate(-50%, -50%); }
+    85% { opacity: 1; transform: translate(-50%, -50%); }
+    100% { opacity: 0; transform: translate(-50%, -70%); }
+}
+.carousel-container{
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 5;
+    min-height: 180px;
+    overflow: hidden;
+}
+.carousel-slide{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.65s ease;
+    z-index: 1;
+    /* max-height: 300px; */
+}
+.carousel-slide img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+.carousel-caption{
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    color: white;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    background: linear-gradient(transparent,rgba(0,0,0,0.6));
+    padding: 20px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+.carousel-caption h2{
+    margin: 0 0 8px 0;
+    font-size: 24px;
+}
+.carousel-caption p{
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.9;
+}
+.carousel-slide.active{
+    opacity: 1;
+    z-index: 1;
+}
+.carousel-btn{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 20;
+    transition: all 20;
+}
+.carousel-btn:hover{
+    background: rgba(0, 0, 0, 0.7);
+    transform: translateY(-50%) scale(1.05);
+}
+.prev {left: 20px;}
+.next {right: 20px;}
+.carousel-dots{
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 20;
+}
+.dot{
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.dot.active{
+    width: 26px;
+    border-radius: 6px;
+    background: white;
+}
+        </style>
+	</head>
+	<body>
+        <div style="position: fixed;top: 20px;left: 20px;z-index: 1000;">
+            <div id="menuBtn" style="font-size: 30px;cursor: pointer;padding: 10px;background: white;
+            border-radius: 50%;box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);width: 50px;height: 50px;display: flex;
+            align-items: center;justify-content: center;">
+                ☰    
+            </div>
+        </div>
+
+        <div id="menuPanel"style="position: fixed;top: 80px; left: 20px; background: white; 
+        border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); width: 250px; padding: 15px; 
+        z-index: 999; display: none;">
+        <div style="font-size: 18px;font-weight: bold;padding-bottom: 10px;border-bottom: 1px solid #eee;margin-bottom: 10px;">菜单</div>
+        <div class="menu-item">📦 我的订单</div>
+        <div class="menu-item">❤️ 我的收藏</div>
+        <div class="menu-item">🛒 购物车</div>
+        <div class="menu-item">👤 个人中心</div>
+        <div class="menu-item">👑 管理员后台</div>
+        </div>
+
+        <!-- 轮播图容器 -->
+<div class="carousel-section">
+    <div class="carousel-container">
+        <div class="carousel-track">
+            <!-- 轮播项1 -->
+            <div class="carousel-slide active">
+                <img src="images/banner3.gif" alt="冬季新品">
+                <div class="carousel-caption">
+                    <h2>坤坤的篮球</h2>
+                    <p>用坤坤篮球 三秒教会你成为篮球高手</p>
+                </div>
+            </div>
+            <!-- 轮播项2 -->
+            <div class="carousel-slide">
+                <img src="images/banner7.jpg" alt="数码好物">
+                <div class="carousel-caption">
+                    <h2>西格玛男士专用</h2>
+                    <p>西格玛男人该有的服装 穿出男人的浪漫</p>
+                </div>
+            </div>
+            <!-- 轮播项3 -->
+            <div class="carousel-slide">
+                <img src="https://picsum.photos/id/96/1200/400" alt="潮流穿搭">
+                <div class="carousel-caption">
+                    <h2>电竞专用</h2>
+                    <p>用它 成为下一个Faker</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 左右箭头 -->
+        <button class="carousel-btn prev" id="prevBtn">❮</button>
+        <button class="carousel-btn next" id="nextBtn">❯</button>
+        
+        <!-- 指示点 -->
+        <div class="carousel-dots">
+            <span class="dot active" data-index="0"></span>
+            <span class="dot" data-index="1"></span>
+            <span class="dot" data-index="2"></span>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+        <button class="category active" data-category="all">全部</button>
+		<button class="category" data-category="men">男装</button>
+        <button class="category" data-category="women">女装</button>
+        <button  class="category" data-category="children-wear">童装</button>
+        <button class="category" data-category="men-shoes">男鞋</button>
+        <button class="category" data-category="sprot">运动</button>
+        <button class="category" data-category="game">游戏</button>
+        <button class="category" data-category="numeral">数码</button>
+        <button class="category" data-category="household-appliances">家电</button>
+        <button class="category" data-category="literature-art">文艺</button>
+        <button class="category" data-category="eat">饮食百货</button>
+        </div>
+        <div class="products-container">
+        <div class="square things1" data-category="men">
+            <img src="images/eb0c45f0b333cbda975bc8849f08674a.jpg" 
+            class="product1">
+            <div class="product-info">
+                <p class="product-name">Kawasaki川崎 90鸭绒 美式</p>
+                <div class="price-action-wrap">
+                <p class="product-price">￥200</p>
+                <button class="product-action" onclick="openModal('Kawasaki川崎90鸭绒美式', 200,'images/eb0c45f0b333cbda975bc8849f08674a.jpg')">购买</button>
+                </div>
+            </div>
+        </div>
+        <div class="square things2" data-category="women">
+            <img src="images/dfa8ab1c06e297428bfe7f7c6214c1f5.jpg"
+            class="product2">
+            <div class="product-info">
+                <p class="product-name">法式双面自带围巾斗篷外套大衣 秋冬季</p>
+                <div class="price-action-wrap">
+                <p class="product-price">￥160</p>
+                <button class="product-action" onclick="openModal('法式双面自带围巾斗篷外套大衣 秋冬季', 160,'images/dfa8ab1c06e297428bfe7f7c6214c1f5.jpg')">购买</button>
+                </div>
+            </div>
+        </div>
+        <div class="square things3" data-category="game">
+            <img src="images/3b83a2335834da35993e3c7ba16f9fc1.jpg"
+            class="product3">
+            <div class="product-info">
+                <p class="product-name">罗技 Logitech G304 LIGHTSPEED 2.4G连接</p>
+                <div class="price-action-wrap">
+                <p class="product-price">￥143</p>
+                <button class="product-action" onclick="openModal('罗技 Logitech G304 LIGHTSPEED 2.4G连接', 143,'images/3b83a2335834da35993e3c7ba16f9fc1.jpg')">购买</button>
+                </div>
+            </div>
+        </div>
+        <div class="square things4" data-category="household-appliances">
+            <img src="images/2de02939132c27f81f518f8f65d9f28d.jpg"
+            class="product4">
+            <div class="product-info">
+                <p class="product-name">格力 GREE 立式移动地暖 IPX4级防水 NJF-X6020</p>
+                <div class="price-action-wrap">
+                <p class="product-price">￥186</p>
+                <button class="product-action" onclick="openModal('格力 GREE 立式移动地暖 IPX4级防水 NJF-X6020', 186,'images/2de02939132c27f81f518f8f65d9f28d.jpg')">购买</button>
+                </div>
+            </div>
+        </div>
+        <div class="square things5" data-category="men-shoes">
+            <img src="images/ce0b50052e5715285eee3035aa1760c3.jpg"
+            class="product5">
+            <div class="product-info">
+                <p class="product-name">Nike Full Force Low 低帮 板鞋 男款 棕白褐</p>
+                <div class="price-action-wrap">
+                <p class="product-price">￥346</p>
+                <button class="product-action" onclick="openModal('Nike Full Force Low 低帮 板鞋 男款 棕白褐', 346,'images/ce0b50052e5715285eee3035aa1760c3.jpg')">购买</button>
+                </div>
+            </div>
+        </div>
+        <div class="square things6" data-category="children-wear">
+            <img src="images/999d3c41d963b270e707b5543cb85082.jpg"
+            class="product6">
+            <div class="product-info">
+                <p class="product-name">BALABALA巴拉巴拉短款羽绒服</p>
+                <div class="price-action-wrap">
+                <p class="product-price">￥183</p>
+                <button class="product-action" onclick="openModal('BALABALA巴拉巴拉短款羽绒服', 183,'images/999d3c41d963b270e707b5543cb85082.jpg')">购买</button>
+                </div>
+            </div>
+        </div>
+        <div class="square things7" data-category="men">
+            <img src="images/banner8.jpg"
+            class="product7">
+            <div class="product-info">
+                <p class="product-name">西格玛男人西服</p>
+                <div class="price-action-wrap">
+                    <p class="product-price">￥345</p>
+                    <button class="product-action" onclick="openModal('西格玛男人西服',345,'images/banner8.jpg')">购买</button>
+                </div>
+            </div>
+        </div>
+        <div class="square things8" data-category="sprot">
+            <img src="images/banner9.jpg"
+            class="product8">
+            <div class="product-info">
+                <p class="product-name">坤坤的篮球</p>
+                <div class="price-action-wrap">
+                    <p class="product-price">￥145</p>
+                    <button class="product-action" onclick="openModal('坤坤的篮球',145,'images/banner9.jpg')">购买</button>
+                </div>
+            </div>
+        </div>
+        <div class="square things9" data-category="literature-art">
+            <img src="images/banner10.jpg"
+            class="product9">
+            <div class="product-info">
+                <p class="product-name">Jeep吉普</p>
+                <div class="price-action-wrap">
+                    <p class="product-price">￥125</p>
+                    <button class="product-action" onclick="openModal('Jeep吉普',125,'images/banner10.jpg')">购买</button>
+                </div>
+            </div>
+        </div>
+        <div class="square things10" data-category="numeral">
+            <img src="images/banner11.jpg"
+            class="product10">
+            <div class="product-info">
+                <p class="product-name">联想 GS106 蓝牙眼镜 高颜值</p>
+                <div class="price-action-wrap">
+                    <p class="product-price">￥101</p>
+                    <button class="product-action" onclick="openModal('联想 GS106 蓝牙眼镜 高颜值',101,'images/banner11.jpg')">购买</button>
+                </div>
+            </div>
+        </div>
+        <div class="square things11" data-category="eat">
+            <img src="images/banner12.jpg"
+            class="product11">
+            <div class="product-info">
+                <p class="product-name">娃哈哈 桂圆莲子八宝粥 360g</p>
+                <div class="price-action-wrap">
+                    <p class="product-price">￥44</p>
+                    <button class="product-action" onclick="openModal('娃哈哈 桂圆莲子八宝粥 360g',44,'images/banner12.jpg')">购买</button>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="purchaseModal">
+            <div class="modal-card">
+                <h3>订单信息</h3>
+                <hr>
+                <div class="font">
+                    <div class="modal-product-image">
+                        <img id="modalProductImage" src="" style="width: 100px; height: 100px; object-fit: cover; border-radius: 12px;">
+                    </div>
+                <p id="modalProductName">商品名</p>
+                <p id="modalProductPrice">价格</p>
+                <div class="xinxi">
+                <p>购买人姓名:</p>
+                <input placeholder="请输入购买人姓名" type="text" id="nameInput">
+                <p>联系人电话:</p>
+                <input type="text" id="phoneInput" placeholder="请输入有效的11位手机号" maxlength="11" oninput="validatePhone(this)">
+                 <small id="phoneHint" style="color: #999; display: block; margin-top: 5px; margin-bottom: 10px;">请输入11位手机号</small>
+                <p>收货人地址:</p>
+                <div style="display: flex; gap: 8px; margin-bottom: 5px;">
+                    <input type="text" id="addressInput" placeholder="请输入收货地址" style="flex: 1;padding: 8px 12px;border: 1px solid #ddd;border-radius: 4px;">
+                    <button type="button" id="locationBtn" style="padding: 8px 16px;background-color: #FF9500;color: white;border: none;border-radius: 4px;cursor: pointer;font-size: 14px;display: flex;align-items: center;gap: 4px;">
+                        📍 定位
+                    </button>
+                </div>
+                <small id="locationStatus" style="color: #999;display: block;margin-bottom: 10px;"></small>
+                </div>
+                <div class="close">
+                <button id="closeModalBt">取消</button>
+                <button id="confirmBtn">确认</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="toastContainer"></div>
+
+        <!--订单创建页面-->
+        <div id="orderPage" class="order-page" style="display: none;">
+            <div style="max-width: 800px;margin: 0 auto;padding: 20px;">
+                <button class="back-btn" onclick="showMainPage()">← 继续购物</button>
+                <h2 style="text-align: left;margin-bottom: 20px;">我的订单</h2>
+                <div id="orderList" class="order-list"></div>
+            </div>
+        </div>
+
+        <script>
+            // 全局 Toast 函数
+            function showToast(message, type = 'success', duration = 3000) {
+                const container = document.getElementById('toastContainer');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.textContent = message;
+                
+                container.appendChild(toast);
+                
+                setTimeout(() => toast.classList.add('show'), 10);
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => container.removeChild(toast), 300);
+                }, duration);
+                
+                toast.addEventListener('click', () => {
+                    toast.classList.remove('show');
+                    setTimeout(() => container.removeChild(toast), 300);
+                });
+            }
+
+            // 分类筛选功能
+            const buttons = document.querySelectorAll('.category');
+            const products = document.querySelectorAll('.square');
+            
+            buttons.forEach(button => {
+                button.addEventListener('click', function(){
+                    buttons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    const selected = this.getAttribute('data-category');
+                    products.forEach(product => {
+                        const category = product.getAttribute('data-category');
+                        if (selected === 'all' || selected === category){
+                            product.classList.remove('hide');
+                        }else{
+                            product.classList.add('hide');
+                        }
+                    });
+                });
+            });
+
+            // 模态框功能
+            (function(){
+                const modal = document.getElementById('purchaseModal');
+                const closeBtn = document.getElementById('closeModalBt');
+
+                window.openModal = function(productName, price, productImage){
+                    document.getElementById('modalProductName').textContent = productName;
+                    document.getElementById('modalProductPrice').textContent = '￥' + price;
+                    document.getElementById('modalProductImage').src = productImage;
+                    modal.classList.remove('hidden');
+                    document.body.classList.add('modal-open');
+                };
+                
+                function closeModal(){
+                    modal.classList.add('hidden');
+                    document.body.classList.remove('modal-open');
+                };
+                
+                closeBtn.addEventListener('click', closeModal);
+                document.addEventListener('keydown',(e) => {
+                    if(e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+                });
+            })();
+
+            // 订单存储数据
+            let orders = [];
+
+            // 加载订单
+            function loadOrdersFromStorage(){
+                const currentUserPhone = sessionStorage.getItem('currentUserPhone');
+                console.log('当前用户手机号:', currentUserPhone);
+                
+                if(!currentUserPhone){
+                    orders = [];
+                    console.log('未登录，订单为空');
+                    return;
+                }
+                const storageKey = `orders_${currentUserPhone}`;
+                const savedOrders = localStorage.getItem(storageKey);
+                if(savedOrders){
+                    try{
+                        orders = JSON.parse(savedOrders);
+                        console.log(`✅ 成功加载用户 ${currentUserPhone} 的订单，共 ${orders.length} 条`, orders);
+                    }catch(e){
+                        console.log('解析本地存储订单失败:', e);
+                        orders = [];
+                    }
+                } else {
+                    orders = [];
+                    console.log(`用户 ${currentUserPhone} 暂无订单`);
+                }
+            }
+
+            // 保存订单到本地储存
+            function saveOrderToLocalStorage(orderInfo){
+                // 使用购买人手机号作为存储键
+                const storageKey = `orders_${orderInfo.buyerPhone}`;
+                let userOrders = [];
+                const savedOrders = localStorage.getItem(storageKey);
+                if(savedOrders){
+                    try{
+                        userOrders = JSON.parse(savedOrders);
+                    }catch(e){
+                        userOrders = [];
+                    }
+                }
+                
+                // 创建完整的订单对象
+                const newOrder = {
+                    id: Date.now(),
+                    productName: orderInfo.productName,
+                    price: '￥' + orderInfo.productPrice,
+                    image: orderInfo.productImage,
+                    buyerName: orderInfo.buyerName,
+                    buyerPhone: orderInfo.buyerPhone,
+                    address: orderInfo.address,
+                    orderDate: new Date().toLocaleString(),
+                    status: '已付款'
+                };
+
+                userOrders.push(newOrder);
+                localStorage.setItem(storageKey, JSON.stringify(userOrders));
+                
+                // 如果当前登录用户就是购买人，则更新 orders 数组
+                if(sessionStorage.getItem('currentUserPhone') === orderInfo.buyerPhone){
+                    orders = userOrders;
+                }
+                
+                console.log(`✅ 订单已保存到用户 ${orderInfo.buyerPhone} 的存储:`, newOrder);
+                return newOrder;
+            }
+
+            // 显示订单列表
+            function displayOrders(){
+                loadOrdersFromStorage();
+                const orderList = document.getElementById('orderList');
+                console.log('显示订单，当前 orders 数组:', orders);
+                
+                if(!orders || orders.length === 0){
+                    orderList.innerHTML = '<p style="text-align: center; color: #999; padding: 50px;">暂无订单，快去购买商品吧！</p>';
+                    return;
+                }
+                
+                let ordersHTML = '';
+                orders.forEach(order => {
+                    ordersHTML += `
+                        <div class="order-item">
+                            <img src="${order.image}" alt="${order.productName}" onerror="this.src='https://via.placeholder.com/100'">
+                            <div class="order-details">
+                                <h3>${order.productName}</h3>
+                                <p>购买人：${order.buyerName}</p>
+                                <p>联系电话：${order.buyerPhone}</p>
+                                <p>收货地址：${order.address}</p>
+                                <p>购买时间：${order.orderDate}</p>
+                                <p>订单状态：<span style="color: #FF9500;">${order.status}</span></p>
+                                <p class="order-price">${order.price}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                orderList.innerHTML = ordersHTML;
+                console.log('✅ 订单列表已渲染');
+            }
+
+            // 显示订单页面
+            function showOrdersPage(){
+                loadOrdersFromStorage(); // 重新加载当前用户的订单
+                document.querySelector('.carousel-section').style.display = 'none';
+                document.querySelector('.container').style.display = 'none';
+                document.querySelector('.products-container').style.display = 'none';
+                document.getElementById('orderPage').style.display = 'block';
+                document.getElementById('menuPanel').style.display = 'none';
+                updateMenuActive('orders');
+                displayOrders(); // 显示订单
+            }
+
+            // 显示首页
+            function showMainPage(){
+                document.querySelector('.carousel-section').style.display = 'block';
+                document.querySelector('.container').style.display = 'block';
+                document.querySelector('.products-container').style.display = 'flex';
+                document.getElementById('orderPage').style.display = 'none';
+                updateMenuActive('main');
+            }
+
+            // 更新菜单激活状态
+            function updateMenuActive(page){
+                const menuItems = document.querySelectorAll('.menu-item');
+                menuItems.forEach(item => item.classList.remove('active'));
+                if(page === 'orders'){
+                    if(menuItems[0]) menuItems[0].classList.add('active');
+                }
+            }
+
+            // 确认购买按钮事件
+            document.getElementById('confirmBtn').addEventListener('click', function(){
+                let name, phone, address;
+                let latitude = null;
+                let longitude = null;
+                let productName, productPrice, productImage, priceNum;
+
+                name = document.getElementById('nameInput').value.trim();
+                phone = document.getElementById('phoneInput').value.trim();
+                address = document.getElementById('addressInput').value.trim();
+
+                // 数据验证
+                if(!name){
+                    showToast('请输入购买人姓名', 'warning');
+                    return;
+                }
+                if(!phone || phone.length != 11 || !/^1[3-9]\d{9}$/.test(phone)){
+                    showToast('请输入有效的11位手机号', 'warning');
+                    return;
+                }
+                if(!address){
+                    showToast('请输入收货地址', 'warning');
+                    return;
+                }
+                
+                // 获取当前商品的信息
+                productName = document.getElementById('modalProductName').textContent;
+                productPrice = document.getElementById('modalProductPrice').textContent;
+                productImage = document.getElementById('modalProductImage').src;
+
+                // 解析价格
+                productPrice = productPrice.replace('￥', '').trim();
+                priceNum = parseFloat(productPrice);
+                
+                console.log('商品价格:', priceNum);
+                
+                if (isNaN(priceNum) || priceNum <= 0) {
+                    showToast('商品价格无效', 'error');
+                    return;
+                }
+
+                // 解析经纬度
+                if (address.includes('纬度:') && address.includes('经度:')) {
+                    const latMatch = address.match(/纬度:([\d.-]+)/);
+                    const lngMatch = address.match(/经度:([\d.-]+)/);
+                    if (latMatch && lngMatch) {
+                        latitude = parseFloat(latMatch[1]);
+                        longitude = parseFloat(lngMatch[1]);
+                    }
+                }
+
+                const orderInfo = {
+                    productName: productName,
+                    productPrice: priceNum,
+                    productImage: productImage,
+                    buyerName: name,
+                    buyerPhone: phone,
+                    address: address,
+                    latitude: latitude,
+                    longitude: longitude
+                };
+
+                // 保存订单到本地存储
+                const savedOrder = saveOrderToLocalStorage(orderInfo);
+                console.log('订单已保存:', savedOrder);
+                
+                // 保存到后端
+                saveOrderToDatabase(orderInfo);
+
+                // 设置当前用户并刷新订单列表
+                sessionStorage.setItem('currentUserPhone', phone);
+                loadOrdersFromStorage();
+                
+                // 显示购买成功弹窗
+                const successToast = document.createElement('div');
+                successToast.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%,-50%);
+                    background: #4CAF50;
+                    color: white;
+                    padding: 20px 40px;
+                    border-radius: 50px;
+                    font-size: 20px;
+                    font-weight: bold;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    z-index: 10000;
+                    animation: fadeInOut 2s ease forwards;
+                `;
+                successToast.textContent = '🎉 购买成功！';
+                document.body.appendChild(successToast);
+                
+                setTimeout(() => {
+                    successToast.remove();
+                }, 2000);
+                
+                // 关闭模态框
+                document.getElementById('closeModalBt').click();
+                
+                // 清空表单
+                document.getElementById('nameInput').value = '';
+                document.getElementById('phoneInput').value = '';
+                document.getElementById('addressInput').value = '';
+                
+                // 显示订单页面
+                showOrdersPage();
+            });
+
+            // 页面加载时的初始化
+            window.addEventListener('load', function(){
+                const savedPhone = sessionStorage.getItem('currentUserPhone');
+                if(savedPhone){
+                    loadOrdersFromStorage();
+                    console.log('页面加载，已登录用户:', savedPhone);
+                }
+                if(window.location.hash === '#orders'){
+                    showOrdersPage();
+                }
+            });
+
+            // 菜单点击事件
+            document.querySelectorAll('.menu-item').forEach((item, index) => {
+                if(index === 0){
+                    item.onclick = function(){
+                        showOrdersPage();
+                    };
+                } else if (index === 4) {
+                    item.onclick = function() {
+                        window.location.href = 'inde2.html';
+                    };
+                } else {
+                    item.onclick = function(){
+                        showToast('功能正在开发中...', 'info');
+                    };
+                }
+            });
+
+            // 发送订单到后端
+            function saveOrderToDatabase(orderInfo) {
+                console.log('准备发送数据到后端:', orderInfo);
+                
+                const postData = {
+                    productName: orderInfo.productName,
+                    productPrice: orderInfo.productPrice,
+                    productImage: orderInfo.productImage,
+                    buyerName: orderInfo.buyerName,
+                    buyerPhone: orderInfo.buyerPhone,
+                    address: orderInfo.address,
+                    latitude: orderInfo.latitude,
+                    longitude: orderInfo.longitude
+                };
+                
+                fetch('http://localhost:8081/api/save_order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(postData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP错误: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        console.log('后端保存成功:', data);
+                    } else {
+                        console.log('后端保存失败:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('后端请求失败:', error);
+                    showToast('订单已保存到本地', 'warning');
+                });
+            }
+        </script>
+
+        <script>
+            function validatePhone(input){
+                const start = input.selectionStart;
+                let value = input.value.replace(/[^0-9]/g, '');
+                if(value.length > 11){
+                    value = value.slice(0,11);
+                }
+                input.value = value;
+                if(input.value.length >= start){
+                    input.setSelectionRange(start,start);
+                }
+                const hint = document.getElementById('phoneHint');
+                if (!hint) return;
+                
+                if(value.length === 0){
+                    hint.textContent = `请输入11位手机号`;
+                    hint.style.color = '#999';
+                    input.style.borderColor = '#ddd';
+                }
+                else if(value.length < 11){
+                    hint.textContent = `还需要输入${11 - value.length}位数字`;
+                    hint.style.color = '#FF9500';
+                    input.style.borderColor = '#FF9500';
+                }
+                else if(value.length === 11){
+                    if (/^1[3-9]\d{9}$/.test(value)){
+                        hint.textContent = '✓ 手机号格式正确';
+                        hint.style.color = 'green';
+                        input.style.borderColor = 'green';
+                    }
+                    else{
+                        hint.textContent = '✗ 请输入有效的手机号（1开头的11位数字）';
+                        hint.style.color = 'red';
+                        input.style.borderColor = 'red';
+                    }
+                }
+            }
+        </script>
+
+        <script>
+            document.getElementById('locationBtn')?.addEventListener('click', function(){
+                const addressInput = document.getElementById('addressInput');
+                const statusEl = document.getElementById('locationStatus');
+
+                if(!navigator.geolocation){
+                    statusEl.textContent = '❌ 您的浏览器不支持定位功能';
+                    statusEl.style.color = 'red';
+                    return;
+                }
+                statusEl.textContent = '🔄 正在获取位置...';
+                statusEl.style.color = '#FF9500';
+
+                navigator.geolocation.getCurrentPosition(
+                    function(position){
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        if(typeof AMap === 'undefined'){
+                            addressInput.value = `纬度:${latitude.toFixed(4)}, 经度:${longitude.toFixed(4)}`;
+                            statusEl.textContent = '✅ 定位成功（坐标模式）';
+                            statusEl.style.color = 'green';
+                            return;
+                        }
+                        const geocoder = new AMap.Geocoder();
+                        geocoder.getAddress([longitude,latitude], function(status, result){
+                            if(status === 'complete' && result.info === 'OK'){
+                                const address = result.regeocode.formattedAddress;
+                                addressInput.value = address;
+                                statusEl.textContent = '✅ 定位成功';
+                                statusEl.style.color = 'green';
+                            }else{
+                                addressInput.value = `纬度:${latitude.toFixed(4)}, 经度:${longitude.toFixed(4)}`;
+                                statusEl.textContent = '✅ 定位成功（坐标模式）';
+                                statusEl.style.color = 'green';
+                            }
+                        });
+                    },
+                    function(error){
+                        let errorMsg = '定位失败:';
+                        switch(error.code){
+                            case error.PERMISSION_DENIED:
+                                errorMsg += '请允许网站获取您的位置权限';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMsg += '位置信息不可用，请检查网络';
+                                break;
+                            case error.TIMEOUT:
+                                errorMsg += '定位超时，请重试';
+                                break;
+                            default:
+                                errorMsg += '未知错误';
+                        }
+                        statusEl.textContent = `❌ ${errorMsg}`;
+                        statusEl.style.color = 'red';
+                    }
+                );
+            });
+        </script>
+
+        <script>
+            document.getElementById('menuBtn').addEventListener('click', function(){
+                const panel = document.getElementById('menuPanel');
+                if(panel.style.display === 'none' || panel.style.display === ''){
+                    panel.style.display = 'block';
+                }else{
+                    panel.style.display = 'none';
+                }
+            });
+
+            document.addEventListener('click', function(event){
+                const menuBtn = document.getElementById('menuBtn');
+                const menuPanel = document.getElementById('menuPanel');
+                if(menuBtn && menuPanel && !menuBtn.contains(event.target) && !menuPanel.contains(event.target)){
+                    menuPanel.style.display = 'none';
+                }
+            });
+            window.addEventListener('load',function(){
+                const savedPhone = sessionStorage.getItem('currentUserPhone');
+                if(savedPhone){
+                    console.log('当前登录用户:',savedPhone);
+                    loadOrdersFromStorage();
+                    if(document.getElementById('orderPage').style.display === 'block'){
+                        displayOrders();
+                    }
+                }else{
+                    console.log('未登录用户');
+                }
+            })
+        </script>
+
+        <script>
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.dot');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            let currentIndex = 0;
+            let autoTimer = null;
+            const intervalTime = 4000;
+
+            function goToSlide(index){
+                if(index < 0){
+                    index = slides.length - 1;
+                }
+                if(index >= slides.length){
+                    index = 0;
+                }
+
+                slides.forEach(slide => slide.classList.remove('active'));
+                dots.forEach(dot => dot.classList.remove('active'));
+
+                slides[index].classList.add('active');
+                dots[index].classList.add('active');
+
+                currentIndex = index
+            }
+
+            function nextSlide(){
+                goToSlide(currentIndex + 1);
+            }
+
+            function prevSlide(){
+                goToSlide(currentIndex - 1);
+            }
+
+            function startAutoPlay(){
+                if(autoTimer) clearInterval(autoTimer);
+                autoTimer = setInterval(() => {
+                    nextSlide();
+                },intervalTime);
+            }
+
+            function stopAutoPlay(){
+                if(autoTimer){
+                    clearInterval(autoTimer);
+                    autoTimer = null;
+                }
+            }
+
+            prevBtn.addEventListener('click',() => {
+                prevSlide();
+                stopAutoPlay();
+                startAutoPlay();
+            })
+
+            nextBtn.addEventListener('click',() => {
+                nextSlide();
+                startAutoPlay();
+                startAutoPlay();
+            })
+
+            dots.forEach((dot,index) => {
+                dot.addEventListener('click',() => {
+                    goToSlide();
+                    stopAutoPlay();
+                    startAutoPlay();
+                })
+            })
+
+            const carouselContainer = document.querySelector('.carousel-container');
+            carouselContainer.addEventListener('mouseenter',stopAutoPlay);
+            carouselContainer.addEventListener('mouseleave',stopAutoPlay);
+
+            startAutoPlay();
+        </script>
+	</body>
+</html>
