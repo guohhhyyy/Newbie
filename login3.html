@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>后台管理</title>
+		<style>
+body{
+	display: flex;
+	justify-content: center;
+	align-items: center ;
+	height: 95vh;
+}
+.center{
+	height: 700px;
+	width: 700px;
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	border: 1px solid #e0e0e0;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+}
+.head-text{
+	display: flex;
+	gap: 10px;
+	flex-direction: column;/*flex-direction 是说 主轴是垂直方向 一般默认是水平方向*/
+	align-items: center; /* align-items 交叉轴，就是与主轴垂直的轴*/
+}
+.unit{
+	color: blue;
+}
+.sub{
+	color: blue;
+	font-size: 25px;
+}
+.input-group{
+	margin-bottom: 20px
+}
+.input-group label{
+	display: block;
+	margin-bottom: 8px;
+}
+.input-group input{
+	width: 100%;
+	padding: 12px 15px;
+	border: 1px solid #dddddd53;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+.input-group input:focus{
+	outline: none;
+	border-color: #3498db;
+}
+.form-container{
+	width: 80%;
+}
+.dl{
+	width: 100%;
+	padding :10px 20px;
+	background-color: #3498db;
+	color: white;
+	font-size: 16px;
+	border-radius: 4px;
+	margin-top: 20px;
+	outline: none;
+	border: none;
+	cursor: pointer;
+}
+.dl:hover{
+	background-color: #2980b9;
+}
+.last{
+	margin-top: 30px;
+	margin-left: 225px;
+	color: #166bb3;
+	cursor: pointer;
+}
+.last a{
+	text-decoration: none;
+	color: #166bb3;
+}
+.last:hover{
+	text-decoration: underline;
+}
+.last2{
+	margin-top: 30px;
+	margin-left: 235px;
+	color: #166bb3;
+	cursor: pointer;
+}
+.last2:hover{
+	text-decoration: underline;
+}
+.toast{
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	background-color: #4CAF50;
+	color: white;
+	padding: 15px 25px;
+	border-radius: 5px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 2);
+	transform: translateX(120%);
+	transition: transform 0.3s ease;
+	z-index: 1000;
+	max-width: 300px;
+}
+.toast.show{
+	transform: translateX(0);
+}
+.toast.error{
+	background-color: #f44336;
+}
+.toast.warning{
+	background-color: #ff9800;
+}
+.toast.info{
+	background-color: #2196F3;
+}
+		</style>
+	</head>
+	<body>
+		<div class="center">
+			<div class="head-text">
+			<h1 class="unit">网络购物系统</h1>
+			<p class="sub">管理员登录</p>
+			</div>
+			<div class="form-container">
+			<div class="input-group">
+				<label>管理员账号</label>
+				<input type="text" id="adminAccount" placeholder="请输入管理员账号" value="admin">
+			</div>
+			<div class="input-group">
+				<label>管理员密码</label>
+				<input type="password" id="adminPassword" placeholder="请输入管理员密码" value="admin123">
+			</div>
+			<div>
+				<button class="dl">登录</button>
+			</div>
+			<div class="last">
+				<a href="login.html">点击返回登录页面</a>
+			</div>
+			<!-- <div class="last2">
+				<p>进入后台管理</p>
+			</div> -->
+			</div>
+		</div>
+
+		<div id="toastContainer"></div>
+		<script>
+			// 2. 登录请求函数
+    // async function loginRequest(phone, password) {
+    //     try {
+    //         const response = await fetch('http://localhost:8081/api/login', {
+    //             method: 'POST',
+    //             headers: { 
+    //                 'Content-Type': 'application/json',
+    //                 'Access-Control-Allow-Origin': '*'
+    //             },
+    //             body: JSON.stringify({ phone: phone, password: password }),
+    //             credentials: 'include'
+    //         });
+
+    //         if (!response.ok) {
+    //             throw new Error('后端返回错误状态码：' + response.status);
+    //         }
+
+    //         const result = await response.json();
+    //         return result;
+    //     } catch (error) {
+    //         console.error('请求失败详情：', error);
+    //         return { 
+    //             success: false, 
+    //             message: error.message || '后端未启动/网络异常/响应格式错误' 
+    //         };
+    //     }
+    // }
+
+
+	function showToast(message, type = 'success', duration = 3000) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        
+        container.appendChild(toast);
+        
+        // 显示Toast
+        setTimeout(() => toast.classList.add('show'), 10);
+        
+        // 自动消失
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => container.removeChild(toast), 300);
+        }, duration);
+        
+        // 点击关闭
+        toast.addEventListener('click', () => {
+            toast.classList.remove('show');
+            setTimeout(() => container.removeChild(toast), 300);
+        });
+    }
+
+
+	const loginButton = document.querySelector('.dl');
+    
+    loginButton.addEventListener('click', function () {
+        // 校验手机号
+        // const isPhoneValid = checkPhone();
+        // if (!isPhoneValid) return;
+
+        // 获取输入值
+        const account = document.getElementById('adminAccount').value.trim();
+        const password = document.getElementById('adminPassword').value;
+
+        // 校验密码非空
+        if (!account) {
+            showToast('请输入管理员账号!', 'warning');
+            return;
+        }
+
+		if(!password){
+			showToast('请输入管理员密码!','warning');
+			return;
+		}
+
+        // 显示加载状态
+        loginButton.disabled = true;
+        loginButton.textContent = "登录中...";
+
+		try {
+            // 发送登录请求
+            // const result = await loginRequest(phone, password);
+            
+            if (account === 'admin' && password === 'admin123') {
+                showToast('登录成功！', 'success');
+
+				//存储登录状态
+
+
+
+                // 登录成功后跳转到首页
+                setTimeout(() => {
+                    window.location.href = "inde2.html"; // 修正拼写
+                }, 1500);
+            } else {
+                showToast('账号或者密码错!' + result.message, 'error');
+            }
+        } catch (error) {
+            showToast('请求出错：' + error.message, 'error');
+            console.error('登录出错:', error);
+        } finally {
+            // 恢复按钮状态
+			setTimeout(() => {
+            loginButton.disabled = false;
+            loginButton.textContent = "登录";
+		},500);
+        }
+    });
+
+
+	document.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            const phoneInput = document.getElementById('phoneInput');
+            const passwordInput = document.getElementById('passwordInput');
+            
+            // 如果焦点在输入框中，按回车触发登录
+            if (document.activeElement === phoneInput || 
+                document.activeElement === passwordInput) {
+                loginButton.click();
+            }
+        }
+    });
+
+		</script>
+	</body>
+</html>
