@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<title>用户订单信息</title>
+		<style>
+.admin-page{
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.admin-head{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0a1e2f;
+    color: white;
+    padding: 20px 30px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+}
+.admin-head h1 i{
+    color: #FFD700;
+    margin-right: 10px;
+}
+.admin-stats{
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 8px 20px;
+    border-radius: 40px;
+}
+.admin-filter{
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+}
+.admin-filter span{
+    font-weight: 600;
+    color: #FFD700;
+    margin: 0 5px;
+}
+.filter-input{
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    max-width: 300px;
+}
+.filter-input:focus{
+    border-color: #FF9500;
+    outline: none;
+}
+.filter-btn,.reset-btn{
+    padding:12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+    font-size: 14px;
+}
+.filter-btn{
+    background-color: #FF9500;
+    color: white;
+}
+.filter-btn:hover{
+    background: #e68900;
+}
+.reset-btn{
+    background: #f0f0f0;
+    color: #333;
+}
+.reset-btn:hover{
+    background: #e0e0e0;
+}
+.p1-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(320px,1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+/*p1卡片网络*/
+.p1-card{
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.3 ease;
+    border-left: 4px solid #FF9500;
+    position: relative;
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+}
+.p1-card:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
+}
+.p1-ribbon{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #0a1e2f;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 2;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.p1-image{
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+}
+.p1-content{
+    padding: 20px;
+}
+.p1-title{
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    color: #333;
+    line-height: 1.4;
+    padding-right: 60px;
+}
+.p1-info p{
+    margin: 8px 0;
+    font-size: 14px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.p1-info i{
+    width: 18px;
+    color: #FF9500;
+}
+.p1-coord{
+    font-family: monospace;
+    background: #f5f5f5;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+.p1-status{
+    display: inline-block;
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-weight: 500;
+}
+.p1-price{
+    margin-top: 15px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #FF9500;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+.empty-message{
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px;
+    color: #999;
+    font-size: 16px;
+}
+.back-btn{
+    background: none;
+    border: 1px solid #FF9500;
+    color: #FF9500;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+.back-btn:hover{
+    background: #FF9500;
+    color: white;
+}
+.refresh-btn{
+    background: #FF9500;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.refresh-btn:hover{
+    background: #e68900;
+}
+.header-actions{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+		</style>
+	</head>
+	<body>
+		<div id="adminPage" class="admin-page">
+            <div class="admin-head">
+                <h1><i>👑</i>管理员订单看板</h1>
+                <div class="header-actions">
+                    <button class="refresh-btn" onclick="refreshOrders()">🔄 刷新数据</button>
+                    <div class="admin-stats">
+                        总订单:<span id="totalOrders">0</span> | 
+                        总金额:<span id="totalAmount">￥0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!--手机号过滤-->
+            <div class="admin-filter">
+                <input type="text" id="adminPhoneFilter" placeholder="输入手机号筛选" class="filter-input">
+                <button class="filter-btn" onclick="filterOrdersByPhone()">🔍 筛选</button>
+                <button class="reset-btn" onclick="resetAdminFilter()">🔄 显示全部</button>
+            </div>
+
+            <!--卡片网络-->
+            <div class="p1-grid" id="p1OrderGrid"></div>
+            <button class="back-btn" onclick="showMainPage()">← 返回商城</button>
+        </div>
+
+        <script>
+            //订单数据模型
+            let allOrders = [];
+            
+            // 从localStorage加载所有订单
+            function loadOrdersFromStorage(){
+                allOrders = [];
+                console.log('开始加载所有订单...');
+                
+                // 遍历localStorage中所有以 orders_ 开头的键
+                for(let i = 0; i < localStorage.length; i++){
+                    const key = localStorage.key(i);
+                    if(key && key.startsWith('orders_')){
+                        try{
+                            const userOrders = JSON.parse(localStorage.getItem(key)) || [];
+                            const userPhone = key.replace('orders_', '');
+                            console.log(`加载用户 ${userPhone} 的订单，共 ${userOrders.length} 条`);
+                            
+                            // 添加用户手机号到每个订单
+                            userOrders.forEach(order => {
+                                allOrders.push({
+                                    ...order,
+                                    userPhone: userPhone
+                                });
+                            });
+                        }catch(e){
+                            console.log('解析订单失败:', key, e);
+                        }
+                    }
+                }
+                
+                console.log(`总共加载了 ${allOrders.length} 条订单`);
+                return allOrders;
+            }
+            
+            // 添加测试数据
+            function addTestData(){
+                console.log('添加测试数据...');
+                const testOrders1 = [
+                    {
+                        id: Date.now() + 1,
+                        productName: 'Nike Full Force Low 板鞋',
+                        price: '￥346',
+                        image: 'images/ce0b50052e5715285eee3035aa1760c3.jpg',
+                        buyerName: '呙浩宇',
+                        buyerPhone: '13762690896',
+                        address: '湖南省长沙市岳麓区',
+                        latitude: '28.1347',
+                        longitude: '112.9855',
+                        orderDate: new Date().toLocaleString(),
+                        status: '已付款'
+                    },
+                    {
+                        id: Date.now() + 2,
+                        productName: 'BALABALA巴拉巴拉短款羽绒服',
+                        price: '￥183',
+                        image: 'images/999d3c41d963b270e707b5543cb85082.jpg',
+                        buyerName: '呙浩宇',
+                        buyerPhone: '13762690896',
+                        address: '湖南省长沙市岳麓区',
+                        latitude: '28.1347',
+                        longitude: '112.9855',
+                        orderDate: new Date().toLocaleString(),
+                        status: '已付款'
+                    }
+                ];
+                
+                const testOrders2 = [
+                    {
+                        id: Date.now() + 3,
+                        productName: '法式双面自带围巾斗篷外套',
+                        price: '￥160',
+                        image: 'images/dfa8ab1c06e297428bfe7f7c6214c1f5.jpg',
+                        buyerName: '李香玲',
+                        buyerPhone: '13511180610',
+                        address: '湖南省长沙市天心区',
+                        latitude: '28.1247',
+                        longitude: '112.9755',
+                        orderDate: new Date().toLocaleString(),
+                        status: '已付款'
+                    }
+                ];
+                
+                // 保存到localStorage
+                localStorage.setItem('orders_13762690896', JSON.stringify(testOrders1));
+                localStorage.setItem('orders_13511180610', JSON.stringify(testOrders2));
+                
+                // 重新加载
+                loadOrdersFromStorage();
+                renderP1Orders();
+                
+                console.log('测试数据添加完成');
+            }
+            
+            // 渲染订单卡片
+            function renderP1Orders(phoneFilter = ''){
+                const grid = document.getElementById('p1OrderGrid');
+                const totalSpan = document.getElementById('totalOrders');
+                const totalAmountSpan = document.getElementById('totalAmount');
+                
+                if(!grid) return;
+                
+                // 筛选订单
+                let filteredOrders = [...allOrders];
+                if(phoneFilter && phoneFilter.trim() !== ''){
+                    filteredOrders = allOrders.filter(order => 
+                        order.buyerPhone && order.buyerPhone.includes(phoneFilter.trim())
+                    );
+                    console.log(`筛选后订单数量: ${filteredOrders.length}`);
+                }
+
+                filteredOrders.sort((a,b) => {
+                    const dateA = new Date(a.orderDate);
+                    const dateB = new Date(b.orderDate);
+
+                    if(isNaN(dateA) || isNaN(dateB)){
+                        return (b.id || 0) - (a.id || 0);
+                    }
+                    return dateB - dateA
+                })
+                
+                // 统计
+                totalSpan.textContent = filteredOrders.length;
+                const total = filteredOrders.reduce((sum, order) => {
+                    let priceStr = order.price;
+                    if(typeof priceStr === 'string'){
+                        priceStr = priceStr.replace('￥', '').replace('¥', '').trim();
+                    }
+                    const price = parseFloat(priceStr);
+                    return sum + (isNaN(price) ? 0 : price);
+                }, 0);
+                totalAmountSpan.textContent = '￥' + total.toFixed(2);
+                
+                // 如果没有订单
+                if(filteredOrders.length === 0){
+                    grid.innerHTML = `
+                        <div class="empty-message">
+                            暂无订单信息 
+                            <button onclick="addTestData()" style="background:#FF9500;color:white;border:none;padding:8px 20px;border-radius:4px;margin-left:10px;cursor:pointer;">
+                                📦 添加测试数据
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // 生成卡片
+                let html = '';
+                filteredOrders.forEach(order => {
+                    // 处理图片路径
+                    let imageUrl = order.image;
+                    if(imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')){
+                        // 如果是相对路径，确保格式正确
+                        if(!imageUrl.startsWith('images/')){
+                            imageUrl = 'images/' + imageUrl;
+                        }
+                    }
+                    
+                    html += `
+                        <div class="p1-card">
+                            <div class="p1-ribbon">📌 订单 #${order.id || 'N/A'}</div>
+                            <img src="${imageUrl || 'https://via.placeholder.com/300x180?text=No+Image'}" 
+                                 class="p1-image" 
+                                 alt="${order.productName || '商品'}"
+                                 onerror="this.src='https://via.placeholder.com/300x180?text=图片加载失败'">
+                            <div class="p1-content">
+                                <h3 class="p1-title">${order.productName || '商品名称'}</h3>
+                                <div class="p1-info">
+                                    <p><i>👤</i> ${order.buyerName || '未知'}</p>
+                                    <p><i>📱</i> ${order.buyerPhone || '未知'}</p>
+                                    <p><i>📍</i> ${order.address || '无地址'}</p>
+                                    <p class="p1-coord">纬度:${order.latitude || '--'}, 经度:${order.longitude || '--'}</p>
+                                    <p><i>📅</i> ${order.orderDate || '未知时间'}</p>
+                                    <p class="p1-status">${order.status || '已付款'}</p>
+                                </div>
+                                <div class="p1-price">${order.price || '￥0'}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                grid.innerHTML = html;
+            }
+            
+            // 手机号筛选
+            function filterOrdersByPhone(){
+                const phone = document.getElementById('adminPhoneFilter').value;
+                renderP1Orders(phone);
+            }
+            
+            // 重置筛选
+            function resetAdminFilter(){
+                document.getElementById('adminPhoneFilter').value = '';
+                renderP1Orders('');
+            }
+            
+            // 刷新订单数据
+            function refreshOrders(){
+                loadOrdersFromStorage();
+                resetAdminFilter();
+                console.log('数据已刷新');
+            }
+            
+            // 返回商城首页
+            function showMainPage(){
+                window.location.href = 'inde.html';
+            }
+            
+            // 页面加载时执行
+            window.onload = function(){
+                console.log('管理员页面加载...');
+                loadOrdersFromStorage();
+                
+                // 如果没有订单数据，自动添加测试数据
+                if(allOrders.length === 0){
+                    console.log('暂无订单，添加测试数据');
+                    addTestData();
+                } else {
+                    renderP1Orders();
+                }
+            }
+            
+            // 监听localStorage变化，实时更新
+            window.addEventListener('storage', function(e) {
+                if(e.key && e.key.startsWith('orders_')){
+                    console.log('检测到订单数据变化:', e.key);
+                    loadOrdersFromStorage();
+                    const currentFilter = document.getElementById('adminPhoneFilter').value;
+                    renderP1Orders(currentFilter);
+                }
+            });
+        </script>
+	</body>
+</html>
