@@ -19,15 +19,15 @@
 ## 核心功能实现源代码
 ### 1.用户认证（包括：用户登录、用户注册、管理员后台登录）
 - **手机号校验**
-\```javascript
+```javascript
 function checkPhone() {
-        const phone = document.querySelector('input[type="tel"]').value;
-        const reg = /^1[3-9]\d{9}$/;
-        if (!reg.test(phone)) {
-            showToast('请输入有效的11位手机号!', 'warning');
-            return false;
-        } else {
-            return true;
-        }
+    const phone = document.querySelector('input[type="tel"]').value;
+    const reg = /^1[3-9]\d{9}$/;
+    if (!reg.test(phone)) {
+        showToast('请输入有效的11位手机号!', 'warning');
+        return false;
+    } else {
+        return true;
     }
-\```
+}
+```
