@@ -134,3 +134,63 @@ async function registerRequest(phone, password) {//异步函数 接受手机号�
         }
     }
 ```
+- **登录请求函数**
+```javascript
+const registerButton = document.querySelector('.dl');  // 获取注册按钮
+    
+    registerButton.addEventListener('click', async function() {
+        console.log('注册按钮被点击了！'); 
+        
+        // 获取输入值
+        const phone = document.getElementById('phoneInput').value.trim();
+        const password = document.getElementById('passwordInput').value;
+        
+        console.log('手机号:', phone, '密码:', password);  // 调试用
+        
+        // 验证手机号
+        if (!checkPhone()) {
+            showToast('请输入有效的11位手机号', 'warning');
+            return;
+        }
+        
+        // 验证密码
+        if (!password) {
+            showToast('请输入密码', 'warning');
+            return;
+        }
+        
+        //限制密码长度
+        if (password.length < 6) {
+            showToast('密码长度至少6位', 'warning');
+            return;
+        }
+        
+        // 显示加载状态
+        registerButton.disabled = true;
+        registerButton.textContent = "注册中...";
+        
+        try {
+            // 发送注册请求
+            const result = await registerRequest(phone, password);//调用函数registerRequest 等待返回结果
+            console.log('注册结果:', result); 
+            
+            // 处理结果
+            if (result.success) {
+                showToast('注册成功！正在跳转到登录页面...', 'success');
+                // 延迟跳转，让用户看到提示
+                setTimeout(() => {
+                    window.location.href = "login.html"; // 跳转到登录页
+                }, 1500);
+            } else {
+                showToast('注册失败：' + result.message, 'error');
+            }
+        } catch (error) {
+            showToast('请求出错：' + error.message, 'error');
+            console.error('注册出错:', error);
+        } finally {
+            // 恢复按钮状态
+            registerButton.disabled = false;
+            registerButton.textContent = "注册";
+        }
+    });
+```
