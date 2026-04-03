@@ -21,13 +21,13 @@
 - **手机号校验**
 ```javascript
 function checkPhone() {
-    const phone = document.querySelector('input[type="tel"]').value;
-    const reg = /^1[3-9]\d{9}$/;
-    if (!reg.test(phone)) {
-        showToast('请输入有效的11位手机号!', 'warning');
-        return false;
-    } else {
-        return true;
+        const phone = document.querySelector('input[type="tel"]').value;
+        const reg = /^1[3-9]\d{9}$/;
+        if (!reg.test(phone)) {
+            showToast('请输入有效的11位手机号!', 'warning');
+            return false;
+        } else {
+            return true;
+        }
     }
-}
 ```
