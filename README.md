@@ -134,7 +134,7 @@ async function registerRequest(phone, password) {//异步函数 接受手机号�
         }
     }
 ```
-- **登录请求函数**
+- **注册请求函数**
 ```javascript
 const registerButton = document.querySelector('.dl');  // 获取注册按钮
     
