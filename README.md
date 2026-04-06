@@ -31,6 +31,32 @@ function checkPhone() {
         }
     }
 ```
+- **showToast函数**
+```javascript
+function showToast(message, type = 'success', duration = 3000) {//message 显示要输出的文字内容 type 默认要输出的是success duration 动画时长3s
+        const container = document.getElementById('toastContainer');// 从 HTML 里面获取元素 toastContainer
+        const toast = document.createElement('div');//创建div 创建toast元素
+        toast.className = `toast ${type}`;//toast 基础类名 所有的Toast共用的样式 比如：位置，圆角，内边距等等 type 动态类名 不同的提示类名有不同的颜色样式
+        toast.textContent = message;//显示输出的内容
+        
+        container.appendChild(toast);//把toast 放入容器
+        
+        // 显示Toast 添加一个动画效果 setTimeout 定时函数
+        setTimeout(() => toast.classList.add('show'), 10);
+        
+        // 自动消失 定时嵌套
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => container.removeChild(toast), 300);
+        }, duration);
+        
+        // 点击关闭
+        toast.addEventListener('click', () => {
+            toast.classList.remove('show');
+            setTimeout(() => container.removeChild(toast), 300);
+        });
+    }
+```
 - **登录请求函数**
 ```javascript
 async function loginRequest(phone, password) {//定义一个异步函数，用于接收手机号和密码
