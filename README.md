@@ -220,3 +220,44 @@ const registerButton = document.querySelector('.dl');  // 获取注册按钮
         }
     });
 ```
+- **管理员登录按钮点击事件**
+```javascript
+const loginButton = document.querySelector('.dl');
+loginButton.addEventListener('click', function () {
+        // 获取输入值
+        const account = document.getElementById('adminAccount').value.trim();
+        const password = document.getElementById('adminPassword').value;
+        // 校验密码非空
+        if (!account) {
+            showToast('请输入管理员账号!', 'warning');
+            return;
+        }
+		if(!password){
+			showToast('请输入管理员密码!','warning');
+			return;
+		}
+        // 显示加载状态
+        loginButton.disabled = true;
+        loginButton.textContent = "登录中...";
+		try {
+            if (account === 'admin' && password === 'admin123') {
+                showToast('登录成功！', 'success');
+                // 登录成功后跳转到首页
+                setTimeout(() => {
+                    window.location.href = "inde2.html";
+                }, 1500);
+            } else {
+                showToast('账号或者密码错!' + result.message, 'error');
+            }
+        } catch (error) {
+            showToast('请求出错：' + error.message, 'error');
+            console.error('登录出错:', error);
+        } finally {
+            // 恢复按钮状态
+			setTimeout(() => {
+            loginButton.disabled = false;
+            loginButton.textContent = "登录";
+		},500);
+        }
+    });
+```
