@@ -261,3 +261,25 @@ loginButton.addEventListener('click', function () {
         }
     });
 ```
+### 2.分类功能实现
+```javascript
+// 分类筛选功能
+            const buttons = document.querySelectorAll('.category');
+            const products = document.querySelectorAll('.square');
+            
+            buttons.forEach(button => {//forEach 遍历这个 NodeList vs 数组
+                button.addEventListener('click', function(){
+                    buttons.forEach(btn => btn.classList.remove('active'));//移除 active
+                    this.classList.add('active');//被点击得按钮 获得active
+                    const selected = this.getAttribute('data-category');//获取当前按钮的分类值 getAttribute 获取HTML的任何属性
+                    products.forEach(product => {
+                        const category = product.getAttribute('data-category');
+                        if (selected === 'all' || selected === category){//如果用户点击 all 或者是 用户点击的按钮和产品的属性相同
+                            product.classList.remove('hide');//显示
+                        }else{
+                            product.classList.add('hide');//隐藏
+                        }
+                    });
+                });
+            });
+```
