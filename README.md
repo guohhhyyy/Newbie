@@ -339,3 +339,45 @@ loginButton.addEventListener('click', function () {
                 }
             }
 ```
+### 5.订单保存到本地存储
+```javascript
+// 保存订单到本地储存 函数的整体功能 接收订单-读取用户订单-追加新订单-保存回 localStorage
+            function saveOrderToLocalStorage(orderInfo){
+                // 使用购买人手机号作为存储键
+                const storageKey = `orders_${orderInfo.buyerPhone}`;
+                let userOrders = [];
+                const savedOrders = localStorage.getItem(storageKey);
+                if(savedOrders){
+                    try{
+                        userOrders = JSON.parse(savedOrders);//把JSON字符串 转换成 数组
+                    }catch(e){
+                        userOrders = [];//如果数据损坏，就用空数组
+                    }
+                }
+                
+                // 创建完整的订单对象
+                const newOrder = {
+                    id: Date.now(),// 返回从1970年1月1日到现在的毫秒数
+                    productName: orderInfo.productName,
+                    price: '￥' + orderInfo.productPrice,
+                    image: orderInfo.productImage,
+                    buyerName: orderInfo.buyerName,
+                    buyerPhone: orderInfo.buyerPhone,
+                    address: orderInfo.address,
+                    orderDate: new Date().toLocaleString(),
+                    status: '已付款'
+                };
+
+                userOrders.push(newOrder);//push 是将元素放在数组的最末尾
+                localStorage.setItem(storageKey, JSON.stringify(userOrders));//localStorage 浏览器全局储存 setItem(key.value) 是存储方法
+                
+                // 如果当前登录用户就是购买人，则更新 orders 数组
+                //其实这里有一个逻辑问题，后续会继续完善
+                if(sessionStorage.getItem('currentUserPhone') === orderInfo.buyerPhone){
+                    orders = userOrders;
+                }
+                
+                console.log(`✅ 订单已保存到用户 ${orderInfo.buyerPhone} 的存储:`, newOrder);
+                return newOrder;
+            }
+```
