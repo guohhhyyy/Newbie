@@ -283,3 +283,28 @@ loginButton.addEventListener('click', function () {
                 });
             });
 ```
+### 3.模态框功能
+```javascript
+(function(){
+                const modal = document.getElementById('purchaseModal');//666
+                const closeBtn = document.getElementById('closeModalBt');//692
+
+                window.openModal = function(productName, price, productImage){
+                    document.getElementById('modalProductName').textContent = productName;
+                    document.getElementById('modalProductPrice').textContent = '￥' + price;
+                    document.getElementById('modalProductImage').src = productImage;
+                    modal.classList.remove('hidden');//移除hidden 显示出模式框
+                    document.body.classList.add('modal-open');//禁止背景滚动
+                };
+                
+                function closeModal(){
+                    modal.classList.add('hidden');//隐藏模型框
+                    document.body.classList.remove('modal-open');//允许背景滚动
+                };
+                
+                closeBtn.addEventListener('click', closeModal);//点击事件 点击“取消”按钮 关闭模型框
+                document.addEventListener('keydown',(e) => {//keydown 是键盘事件 e 是事件对象
+                    if(e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+                });
+            })();
+```
