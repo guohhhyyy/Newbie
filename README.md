@@ -308,3 +308,34 @@ loginButton.addEventListener('click', function () {
                 });
             })();
 ```
+### 4.订单存储数组 加载订单
+```javascript
+// 订单存储数据 存储当前用户的订单数组
+            let orders = [];
+
+            // 加载订单
+            function loadOrdersFromStorage(){
+                const currentUserPhone = sessionStorage.getItem('currentUserPhone');//currentUserPhone 是购买东西时所输入的手机号
+                console.log('当前用户手机号:', currentUserPhone);
+                
+                if(!currentUserPhone){
+                    orders = [];
+                    console.log('没有最近的购买手机号，订单为空');
+                    return;
+                }
+                const storageKey = `orders_${currentUserPhone}`;//构建存储键名 如：currentUserPhone = 13762690869 生成 orders_13762690869
+                const savedOrders = localStorage.getItem(storageKey);//从浏览器的 localStorage 读取键名
+                if(savedOrders){
+                    try{
+                        orders = JSON.parse(savedOrders);//将 JSON 字符串 转化成javascript对象
+                        console.log(`✅ 成功加载用户 ${currentUserPhone} 的订单，共 ${orders.length} 条`, orders);
+                    }catch(e){
+                        console.log('解析本地存储订单失败:', e);
+                        orders = [];//清空数组 避免程序崩溃
+                    }
+                } else {
+                    orders = [];
+                    console.log(`用户 ${currentUserPhone} 暂无订单`);
+                }
+            }
+```
