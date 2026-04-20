@@ -381,3 +381,37 @@ loginButton.addEventListener('click', function () {
                 return newOrder;
             }
 ```
+### 6.订单显示列表
+```javascript
+function displayOrders(){
+                loadOrdersFromStorage();//781 从浏览器的localStorage读取数据
+                const orderList = document.getElementById('orderList');//orderList 是用来放置HTML内容的
+                console.log('显示订单，当前 orders 数组:', orders);
+                
+                if(!orders || orders.length === 0){//空状态处理
+                    orderList.innerHTML = '<p style="text-align: center; color: #999; padding: 50px;">暂无订单，快去购买商品吧！</p>';
+                    return;
+                }
+                
+                let ordersHTML = '';//中间变量 
+                orders.forEach(order => {
+                    ordersHTML += `
+                        <div class="order-item">
+                            <img src="${order.image}" alt="${order.productName}" onerror="this.src='https://via.placeholder.com/100'">
+                            <div class="order-details">
+                                <h3>${order.productName}</h3>
+                                <p>购买人：${order.buyerName}</p>
+                                <p>联系电话：${order.buyerPhone}</p>
+                                <p>收货地址：${order.address}</p>
+                                <p>购买时间：${order.orderDate}</p>
+                                <p>订单状态：<span style="color: #FF9500;">${order.status}</span></p>
+                                <p class="order-price">${order.price}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                orderList.innerHTML = ordersHTML;//将生成的HTML放入页面中
+                console.log('✅ 订单列表已渲染');
+            }
+```
