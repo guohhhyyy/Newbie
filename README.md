@@ -416,7 +416,7 @@ function displayOrders(){
             }
 ```
 ### 7.订单显示、首页显示、更新菜单激活状态
--**显示订单页面**
+- **显示订单页面**
 ```javascript
 function showOrdersPage(){
                 loadOrdersFromStorage(); //781 重新加载当前用户的订单
@@ -429,7 +429,7 @@ function showOrdersPage(){
                 displayOrders(); // 显示订单
             }
 ```
--**显示首页**
+- **显示首页**
 ```javascript
 function showMainPage(){
                 document.querySelector('.carousel-section').style.display = 'block';//显示轮播图区域
@@ -439,7 +439,7 @@ function showMainPage(){
                 updateMenuActive('main');//更新主面板
             }
 ```
--**更新菜单激活状态**
+- **更新菜单激活状态**
 ```javascript
  function updateMenuActive(page){//参数 page
                 const menuItems = document.querySelectorAll('.menu-item');//获取每个菜单选项
