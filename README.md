@@ -415,3 +415,37 @@ function displayOrders(){
                 console.log('✅ 订单列表已渲染');
             }
 ```
+### 7.订单显示、首页显示、更新菜单激活状态
+-**显示订单页面**
+```javascript
+function showOrdersPage(){
+                loadOrdersFromStorage(); //781 重新加载当前用户的订单
+                document.querySelector('.carousel-section').style.display = 'none';//隐藏轮播区域
+                document.querySelector('.container').style.display = 'none';//隐藏分类区域
+                document.querySelector('.products-container').style.display = 'none';//隐藏商品区域
+                document.getElementById('orderPage').style.display = 'block';//显示订单区域 block 垂直排列
+                document.getElementById('menuPanel').style.display = 'none';//隐藏菜单
+                updateMenuActive('orders');//更新订单
+                displayOrders(); // 显示订单
+            }
+```
+-**显示首页**
+```javascript
+function showMainPage(){
+                document.querySelector('.carousel-section').style.display = 'block';//显示轮播图区域
+                document.querySelector('.container').style.display = 'block';//显示分类区域
+                document.querySelector('.products-container').style.display = 'flex';//显示商品区域 flex 水平排列 弹性盒子
+                document.getElementById('orderPage').style.display = 'none';//隐藏订单区域
+                updateMenuActive('main');//更新主面板
+            }
+```
+-**更新菜单激活状态**
+```javascript
+ function updateMenuActive(page){//参数 page
+                const menuItems = document.querySelectorAll('.menu-item');//获取每个菜单选项
+                menuItems.forEach(item => item.classList.remove('active'));//forEach 遍历menuItems
+                if(page === 'orders'){//判断是不是订单页面
+                    if(menuItems[0]) menuItems[0].classList.add('active');//细节处理有点小失误，后续完善，实际上是让第一个按钮变色
+                }
+            }
+```
